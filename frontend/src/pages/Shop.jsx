@@ -1,150 +1,213 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import SEO from '../components/SEO';
 import ProductCard from '../components/product/ProductCard';
-import { Search, SlidersHorizontal, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Loader2, X, ChevronDown } from 'lucide-react';
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest First' },
+  { value: 'price-asc', label: 'Price: Low → High' },
+  { value: 'price-desc', label: 'Price: High → Low' },
+  { value: 'rating', label: 'Top Rated' },
+  { value: 'popular', label: 'Most Popular' },
+];
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [flavors, setFlavors] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Filter States
   const [search, setSearch] = useState('');
   const [selectedFlavor, setSelectedFlavor] = useState('');
   const [sort, setSort] = useState('newest');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // Fetch Flavors for Filter
   useEffect(() => {
-    const fetchFlavors = async () => {
-      try {
-        const { data } = await api.get('/products/flavors/list');
-        if (data.success) setFlavors(data.flavors);
-      } catch (err) {
-        console.error("Failed to fetch flavors", err);
-      }
-    };
-    fetchFlavors();
+    api.get('/products/flavors/list').then(({ data }) => {
+      if (data.success) setFlavors(data.flavors);
+    });
   }, []);
 
-  // Fetch Products based on filters
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const { data } = await api.get('/products', {
-          params: { search, flavor: selectedFlavor, sort }
-        });
-        if (data.success) setProducts(data.products);
-      } catch (err) {
-        console.error("Failed to fetch products", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Debounce search slightly
-    const delay = setTimeout(() => fetchProducts(), 300);
-    return () => clearTimeout(delay);
+    setLoading(true);
+    const timer = setTimeout(() => {
+      api
+        .get('/products', { params: { search, flavor: selectedFlavor, sort } })
+        .then(({ data }) => {
+          if (data.success) setProducts(data.products);
+        })
+        .finally(() => setLoading(false));
+    }, 280);
+    return () => clearTimeout(timer);
   }, [search, selectedFlavor, sort]);
 
+  const activeSort = SORT_OPTIONS.find((o) => o.value === sort);
+
   return (
-    <div className="min-h-screen bg-cream py-8">
-      <SEO 
-        title="Shop Premium Banana Chips" 
-        description="Browse our wide selection of freshly made Kerala banana chips. Available in classic salted, pepper, spicy masala, and more."
+    <div className="min-h-screen bg-[#f9f5ed]">
+      <SEO
+        title="Shop Premium Banana Chips"
+        description="Browse our collection of authentic Kerala banana chips — Classic Salted, Pepper, Masala, Chilli & more. Free delivery above ₹500."
+        keywords="buy banana chips online, Kerala chips, premium snacks India"
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Page Header */}
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-extrabold text-matte-black mb-4">Our Collections</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">Discover the crunch that everyone is talking about. Prepared with love, shipped with care.</p>
+      {/* Page hero */}
+      <div className="bg-[#0d4023] py-16 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-[#f5c842] text-xs font-bold tracking-[3px] uppercase mb-3">Our Collection</p>
+          <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
+            Every Chip, a Masterpiece
+          </h1>
+          <p className="text-white/60 text-lg max-w-xl mx-auto">
+            Handcrafted in small batches. Sealed fresh within hours. Never compromised.
+          </p>
         </div>
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          
-          {/* Sidebar Filters */}
-          <aside className="lg:w-1/4">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
-              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-100">
-                <SlidersHorizontal size={20} className="text-warm-yellow-dark" />
-                <h2 className="font-bold text-lg">Filters</h2>
-              </div>
-
-              {/* Search */}
-              <div className="mb-6 relative">
-                <input 
-                  type="text" 
-                  placeholder="Search chips..." 
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-warm-yellow"
-                />
-                <Search size={18} className="absolute left-3 top-3.5 text-gray-400" />
-              </div>
-
-              {/* Flavors Filter */}
-              <div className="mb-6">
-                <h3 className="font-semibold mb-3">Flavors</h3>
-                <div className="space-y-2">
-                  <button 
-                    onClick={() => setSelectedFlavor('')}
-                    className={`block w-full text-left px-3 py-2 rounded-lg transition ${selectedFlavor === '' ? 'bg-matte-black text-white' : 'text-gray-600 hover:bg-gray-50'}`}
-                  >
-                    All Flavors
-                  </button>
-                  {flavors.map((flavor) => (
-                    <button 
-                      key={flavor}
-                      onClick={() => setSelectedFlavor(flavor)}
-                      className={`block w-full text-left px-3 py-2 rounded-lg transition ${selectedFlavor === flavor ? 'bg-matte-black text-white' : 'text-gray-600 hover:bg-gray-50'}`}
-                    >
-                      {flavor}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          {/* Product Grid */}
-          <main className="lg:w-3/4">
-            {/* Top Bar (Sorting) */}
-            <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-              <p className="text-gray-500 font-medium">{products.length} Products Found</p>
-              <select 
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-                className="bg-gray-50 border border-gray-200 text-matte-black text-sm rounded-lg focus:ring-warm-yellow focus:border-warm-yellow block p-2.5 outline-none"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Controls bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8">
+          {/* Search */}
+          <div className="relative flex-1 max-w-md">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#0d4023]/40" />
+            <input
+              type="text"
+              placeholder="Search flavours, names…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full h-11 pl-10 pr-10 bg-white border border-black/[0.08] rounded-xl text-sm text-[#0d4023] placeholder:text-[#0d4023]/40 focus:outline-none focus:border-[#0d4023]/30 focus:ring-2 focus:ring-[#0d4023]/10 transition"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0d4023]/40 hover:text-[#0d4023]"
               >
-                <option value="newest">Newest Arrivals</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="popular">Most Popular</option>
-              </select>
-            </div>
-
-            {/* Grid */}
-            {loading ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="animate-spin text-warm-yellow" size={40} />
-              </div>
-            ) : products.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-                <h3 className="text-xl font-bold text-matte-black mb-2">No products found</h3>
-                <p className="text-gray-500">Try adjusting your search or filters.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))}
-              </div>
+                <X size={14} />
+              </button>
             )}
-          </main>
+          </div>
+
+          {/* Filter pill toggle (mobile) */}
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="sm:hidden h-11 px-4 bg-white border border-black/[0.08] rounded-xl text-sm font-semibold text-[#0d4023] flex items-center gap-2"
+          >
+            <SlidersHorizontal size={16} /> Filters
+          </button>
+
+          {/* Flavour pills (desktop) */}
+          <div className="hidden sm:flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => setSelectedFlavor('')}
+              className={`h-9 px-4 rounded-full text-xs font-bold transition-all ${
+                selectedFlavor === ''
+                  ? 'bg-[#0d4023] text-white shadow-sm'
+                  : 'bg-white border border-black/[0.08] text-[#0d4023]/70 hover:border-[#0d4023]/30'
+              }`}
+            >
+              All
+            </button>
+            {flavors.map((f) => (
+              <button
+                key={f}
+                onClick={() => setSelectedFlavor(selectedFlavor === f ? '' : f)}
+                className={`h-9 px-4 rounded-full text-xs font-bold transition-all ${
+                  selectedFlavor === f
+                    ? 'bg-[#0d4023] text-white shadow-sm'
+                    : 'bg-white border border-black/[0.08] text-[#0d4023]/70 hover:border-[#0d4023]/30'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {/* Sort */}
+          <div className="relative ml-auto">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="h-11 pl-4 pr-10 bg-white border border-black/[0.08] rounded-xl text-sm font-semibold text-[#0d4023] focus:outline-none focus:border-[#0d4023]/30 cursor-pointer appearance-none"
+            >
+              {SORT_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0d4023]/50 pointer-events-none" />
+          </div>
         </div>
+
+        {/* Mobile filter drawer */}
+        {filtersOpen && (
+          <div className="sm:hidden mb-6 p-4 bg-white rounded-2xl border border-black/[0.06] flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedFlavor('')}
+              className={`h-9 px-4 rounded-full text-xs font-bold transition-all ${
+                selectedFlavor === ''
+                  ? 'bg-[#0d4023] text-white'
+                  : 'bg-[#f9f5ed] text-[#0d4023]/70'
+              }`}
+            >
+              All
+            </button>
+            {flavors.map((f) => (
+              <button
+                key={f}
+                onClick={() => setSelectedFlavor(selectedFlavor === f ? '' : f)}
+                className={`h-9 px-4 rounded-full text-xs font-bold transition-all ${
+                  selectedFlavor === f
+                    ? 'bg-[#0d4023] text-white'
+                    : 'bg-[#f9f5ed] text-[#0d4023]/70'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Results count */}
+        <div className="flex items-center justify-between mb-6">
+          <p className="text-sm text-[#0d4023]/50">
+            {loading ? 'Loading…' : `${products.length} product${products.length !== 1 ? 's' : ''} found`}
+          </p>
+          {(search || selectedFlavor) && (
+            <button
+              onClick={() => { setSearch(''); setSelectedFlavor(''); }}
+              className="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1"
+            >
+              <X size={12} /> Clear filters
+            </button>
+          )}
+        </div>
+
+        {/* Grid */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-32 gap-4">
+            <Loader2 size={36} className="animate-spin text-[#f5c842]" />
+            <p className="text-[#0d4023]/50 text-sm font-medium">Finding the freshest chips…</p>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-32 text-center gap-4">
+            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-sm">
+              🍌
+            </div>
+            <h3 className="text-xl font-black text-[#0d4023]">No chips found</h3>
+            <p className="text-[#0d4023]/50 text-sm">Try a different search or clear your filters.</p>
+            <button
+              onClick={() => { setSearch(''); setSelectedFlavor(''); }}
+              className="mt-2 h-10 px-6 bg-[#0d4023] text-white rounded-xl text-sm font-bold hover:bg-[#092a17] transition-all"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

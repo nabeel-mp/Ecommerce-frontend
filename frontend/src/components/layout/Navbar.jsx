@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Heart, User, Menu, LogOut, X } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../features/auth/authSlice';
-import logo from '../../assets/logo.png'; 
+import logo from '../../assets/logo.jpeg'; 
 
 const Navbar = () => {
   const { totalItems } = useSelector((state) => state.cart);
