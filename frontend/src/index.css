@@ -1,2 +1,35 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand Colors */
+  --color-chip-green: #0d4023;
+  --color-chip-green-dark: #092a17;
+  --color-chip-cream: #f9f5ed;
+  --color-chip-cream-light: #fef9ec;
+  --color-chip-gold: #f5c842;
+  --color-chip-gold-dark: #d8a918;
+  --color-chip-black: #1a1a1a;
+
+  /* Typography */
+  --font-poppins: "Poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-chip-cream text-chip-black font-inter antialiased selection:bg-chip-green selection:text-white;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins;
+  }
+
+  /* Utility to hide scrollbar but allow scrolling */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

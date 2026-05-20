@@ -40,10 +40,10 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       to={`/shop/${product.slug}`}
-      className="group bg-white rounded-2xl overflow-hidden border border-black/[0.06] hover:border-[#0d4023]/20 hover:shadow-xl transition-all duration-300 flex flex-col"
+      className="group bg-white rounded-2xl overflow-hidden border border-chip-black/5 hover:border-chip-green/20 hover:shadow-xl transition-all duration-300 flex flex-col"
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-[#f9f5ed]">
+      <div className="relative aspect-square overflow-hidden bg-chip-cream">
         {primaryImage ? (
           <img
             src={primaryImage}
@@ -58,12 +58,12 @@ const ProductCard = ({ product }) => {
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {product.isBestSeller && (
-            <span className="bg-[#0d4023] text-[#f5c842] text-[10px] font-black px-2.5 py-1 rounded-full tracking-wide uppercase">
+            <span className="bg-chip-green text-chip-gold text-[10px] font-black px-2.5 py-1 rounded-full tracking-wide uppercase">
               Bestseller
             </span>
           )}
           {discount && (
-            <span className="bg-[#f5c842] text-[#0d4023] text-[10px] font-black px-2.5 py-1 rounded-full">
+            <span className="bg-chip-gold text-chip-green text-[10px] font-black px-2.5 py-1 rounded-full">
               {discount}% OFF
             </span>
           )}
@@ -75,7 +75,7 @@ const ProductCard = ({ product }) => {
           className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
             wished
               ? 'bg-red-500 text-white shadow-sm'
-              : 'bg-white/80 backdrop-blur-sm text-[#0d4023]/50 hover:text-red-500 opacity-0 group-hover:opacity-100'
+              : 'bg-white/80 backdrop-blur-sm text-chip-green/50 hover:text-red-500 opacity-0 group-hover:opacity-100'
           }`}
           aria-label="Wishlist"
         >
@@ -85,10 +85,10 @@ const ProductCard = ({ product }) => {
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-grow">
-        <p className="text-[10px] font-bold text-[#c4a020] tracking-widest uppercase mb-1">
+        <p className="text-[10px] font-bold text-chip-gold-dark tracking-widest uppercase mb-1">
           {product.flavor}
         </p>
-        <h3 className="font-bold text-[#0d4023] text-[15px] leading-snug mb-3 line-clamp-2 group-hover:text-[#0d4023]">
+        <h3 className="font-bold text-chip-green text-[15px] leading-snug mb-3 line-clamp-2">
           {product.name}
         </h3>
 
@@ -102,13 +102,13 @@ const ProductCard = ({ product }) => {
                   size={11}
                   className={
                     s <= Math.round(product.averageRating)
-                      ? 'text-[#f5c842] fill-[#f5c842]'
-                      : 'text-black/10 fill-black/10'
+                      ? 'text-chip-gold fill-chip-gold'
+                      : 'text-chip-black/10 fill-chip-black/10'
                   }
                 />
               ))}
             </div>
-            <span className="text-[11px] text-[#0d4023]/50 font-medium">
+            <span className="text-[11px] text-chip-green/50 font-medium">
               ({product.numReviews})
             </span>
           </div>
@@ -117,11 +117,11 @@ const ProductCard = ({ product }) => {
         {/* Price + CTA */}
         <div className="mt-auto flex items-end justify-between gap-3">
           <div>
-            <p className="text-[11px] text-[#0d4023]/40 font-medium mb-0.5">from</p>
+            <p className="text-[11px] text-chip-green/40 font-medium mb-0.5">from</p>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-black text-[#0d4023]">₹{startingPrice}</span>
+              <span className="text-xl font-black text-chip-green">₹{startingPrice}</span>
               {lowestMrp && lowestMrp > startingPrice && (
-                <span className="text-sm text-[#0d4023]/35 line-through font-medium">₹{lowestMrp}</span>
+                <span className="text-sm text-chip-green/35 line-through font-medium">₹{lowestMrp}</span>
               )}
             </div>
           </div>
@@ -130,8 +130,8 @@ const ProductCard = ({ product }) => {
             onClick={handleAddToCart}
             className={`h-10 w-10 flex items-center justify-center rounded-xl transition-all shrink-0 ${
               adding
-                ? 'bg-[#0d4023] text-[#f5c842] scale-95'
-                : 'bg-[#f9f5ed] text-[#0d4023] hover:bg-[#0d4023] hover:text-[#f5c842] group-hover:scale-110'
+                ? 'bg-chip-green text-chip-gold scale-95'
+                : 'bg-chip-cream text-chip-green hover:bg-chip-green hover:text-chip-gold group-hover:scale-110'
             }`}
             aria-label="Add to cart"
           >
