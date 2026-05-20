@@ -3,6 +3,7 @@ import SEO from '../components/SEO';
 import { Leaf, Droplet, Sparkles, Package, ArrowRight, Star } from 'lucide-react';
 import heroBg from '../assets/website background image chipcharm.png';
 import productImg from '../assets/ChipCharm-Banana-Chips.jpeg';
+import Contact from './Contact';
 
 const Home = () => {
   return (
@@ -10,21 +11,22 @@ const Home = () => {
       <SEO 
         title="Premium Kerala Banana Chips" 
         description="Buy the freshest, crunchiest premium Kerala banana chips online in Bangalore."
-        keywords="Kerala Banana Chips, Premium Banana Chips, Taste of Malabar"
       />
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center w-full overflow-hidden">
+      <section className="relative min-h-screen flex items-center w-full overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBg} 
             alt="ChipCharm Premium Banana Chips" 
             className="w-full h-full object-cover object-right md:object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-chip-cream/95 via-chip-cream/70 to-transparent md:w-2/3"></div>
+          {/* Subtle gradient so text is readable, but image remains clear */}
+          <div className="absolute inset-0 bg-gradient-to-r from-chip-cream/90 via-chip-cream/50 to-transparent md:w-3/4"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-10">
+        {/* Increased padding here (pt-40) to account for the giant logo */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-40 md:pt-48">
           <div className="max-w-2xl">
             <div className="inline-block px-4 py-1.5 rounded-full bg-chip-gold/20 border border-chip-gold/50 text-chip-green font-semibold text-sm tracking-wide mb-6">
               100% Natural • No Preservatives
@@ -82,9 +84,6 @@ const Home = () => {
           <p className="text-lg text-gray-600 leading-relaxed mb-12">
             We believe that a great snack shouldn't be a guilty pleasure. It should be a masterpiece of tradition. That's why we source the finest Nendran bananas and craft them using age-old Malabar techniques, ensuring every bite delivers pure, unadulterated joy.
           </p>
-          <div className="overflow-hidden rounded-[2.5rem] shadow-lg">
-             <img src={heroBg} alt="Spices and Bananas" className="w-full h-72 md:h-96 object-cover hover:scale-105 transition-transform duration-1000" />
-          </div>
         </div>
       </section>
 
@@ -137,6 +136,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <Contact/>
     </div>
   );
 };
