@@ -26,17 +26,25 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { isAuthenticated, isLoading, isError, message, requireOtpEmail } = useSelector(
+  // Added 'user' to the destructured state so we can check their role
+  const { isAuthenticated, user, isLoading, isError, message, requireOtpEmail } = useSelector(
     (s) => s.auth
   );
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/');
+    // If authenticated, check role and navigate accordingly
+    if (isAuthenticated) {
+      if (user?.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
+    }
     if (requireOtpEmail) {
       dispatch(resetAuthStatus());
       navigate(`/verify-otp?email=${requireOtpEmail}`);
     }
-  }, [isAuthenticated, requireOtpEmail, navigate, dispatch]);
+  }, [isAuthenticated, user, requireOtpEmail, navigate, dispatch]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
   const handleSubmit = (e) => {
