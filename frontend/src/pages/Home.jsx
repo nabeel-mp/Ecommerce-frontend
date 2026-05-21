@@ -25,18 +25,19 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-chip-cream/90 via-chip-cream/50 to-transparent md:w-3/4"></div>
         </div>
 
-        {/* Increased padding here (pt-40) to account for the giant logo */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-40 md:pt-48">
+        {/* Adjusted padding (pt-28 md:pt-32) to move the text block higher up the screen */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-28 md:pt-32">
           <div className="max-w-2xl">
             <div className="inline-block px-4 py-1.5 rounded-full bg-chip-gold/20 border border-chip-gold/50 text-chip-green font-semibold text-sm tracking-wide mb-6">
               100% Natural • No Preservatives
             </div>
             
             <h1 className="text-5xl md:text-7xl font-extrabold text-chip-green leading-[1.1] mb-6 tracking-tight">
-              Authentic Taste. <br />
+              Crispy happiness <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-chip-gold-dark to-chip-gold">
-                Unmatched Crunch.
-              </span>
+                for everyone,
+              </span> <br />
+              everyday.
             </h1>
             
             <p className="text-lg md:text-xl text-chip-green/80 mb-10 font-inter leading-relaxed max-w-lg font-medium">
@@ -76,14 +77,42 @@ const Home = () => {
       </section>
 
       {/* STORY SECTION */}
-      <section className="py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-chip-green mb-6">
-            Snacking, Elevated.
-          </h2>
-          <p className="text-lg text-gray-600 leading-relaxed mb-12">
-            We believe that a great snack shouldn't be a guilty pleasure. It should be a masterpiece of tradition. That's why we source the finest Nendran bananas and craft them using age-old Malabar techniques, ensuring every bite delivers pure, unadulterated joy.
-          </p>
+      <section className="py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
+            {/* Left Side: Text */}
+            <div className="text-left">
+              <h2 className="text-4xl md:text-5xl font-extrabold text-chip-green mb-6 leading-tight">
+                Our Story
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6 font-inter">
+                We believe that a great snack shouldn't be a guilty pleasure. It should be a masterpiece of tradition. 
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed mb-10 font-inter">
+                That's why we source the finest Nendran bananas and craft them using age-old Malabar techniques, ensuring every bite delivers pure, unadulterated joy.
+              </p>
+              
+              <Link to="/our-story" className="inline-flex items-center gap-2 text-chip-green font-bold uppercase tracking-widest text-sm hover:text-chip-gold-dark transition-colors group">
+                Discover More <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+            
+            {/* Right Side: Image */}
+            <div className="relative">
+              <div className="aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-4 border-white">
+                <img 
+                  src="https://images.unsplash.com/photo-1604328698692-f76ea9498e76?auto=format&fit=crop&q=80&w=800" 
+                  alt="Kerala Bananas" 
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              {/* Decorative background blobs to make the image pop */}
+              <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-chip-gold rounded-full mix-blend-multiply filter blur-2xl opacity-60 z-0"></div>
+              <div className="absolute -top-8 -left-8 w-48 h-48 bg-chip-green rounded-full mix-blend-multiply filter blur-2xl opacity-20 z-0"></div>
+            </div>
+
+          </div>
         </div>
       </section>
 
